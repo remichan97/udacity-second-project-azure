@@ -4,20 +4,18 @@ import json
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 
+from db_client import DbClient
+
+client = DbClient('posts')
+
 def main(req: func.HttpRequest) -> func.HttpResponse:
 
     id = req.params.get('id')
 
     if id:
         try:
-            url = "localhost"  # TODO: Update with appropriate MongoDB connection information
-            client = pymongo.MongoClient(url)
-            database = client['azure']
-            collection = database['posts']
-
-            query = {'_id': ObjectId(id)}
-            result = collection.find_one(query)
-            result = dumps(result)
+            data = client.getItems(id)
+            result = dumps(data)
 
             return func.HttpResponse(result, mimetype="application/json", charset='utf-8')
         except:

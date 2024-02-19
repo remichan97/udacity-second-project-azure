@@ -1,19 +1,15 @@
 import azure.functions as func
-import pymongo
-import json
 from bson.json_util import dumps
+
+from db_client import DbClient
+
+client = DbClient('ads')
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
 
     try:
-        url = "localhost"  # TODO: Update with appropriate MongoDB connection information
-        client = pymongo.MongoClient(url)
-        database = client['azure']
-        collection = database['advertisements']
-
-
-        result = collection.find({})
-        result = dumps(result)
+        data = client.getItems()
+        result = dumps(data)
 
         return func.HttpResponse(result, mimetype="application/json", charset='utf-8')
     except:

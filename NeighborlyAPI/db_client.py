@@ -10,7 +10,7 @@ class DbClient:
 		database = client['project2']
 		self.collection = database[collection]
   
-	def getItems(self, id) : return self.collection.find({}) if id is None else self.collection.find( { '_id': ObjectId(id) } )
+	def getItems(self, id = None) : return self.collection.find({}) if id is None else self.collection.find( { '_id': ObjectId(id) } )
 
 	def addNew(self, data) : self.collection.insert_one(data)
  
