@@ -13,7 +13,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     
     if json:
         try:
-            client.addNew(json)
+            client.addNew(eval(json))
             return func.HttpResponse(req.get_body())
         except ValueError:
             return func.HttpResponse('Database connection error.', status_code=500)

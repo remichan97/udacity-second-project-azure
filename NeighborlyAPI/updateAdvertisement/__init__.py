@@ -2,6 +2,10 @@ import azure.functions as func
 import pymongo
 from bson.objectid import ObjectId
 
+from db_client import DbClient
+
+client = DbClient('ads')
+
 def main(req: func.HttpRequest) -> func.HttpResponse:
 
     id = req.params.get('id')
@@ -9,14 +13,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     if request:
         try:
-            url = "localhost"  # TODO: Update with appropriate MongoDB connection information
-            client = pymongo.MongoClient(url)
-            database = client['azure']
-            collection = database['advertisements']
-            
-            filter_query = {'_id': ObjectId(id)}
             update_query = {"$set": eval(request)}
-            rec_id1 = collection.update_one(filter_query, update_query)
+            client.update(id, update_query)
             return func.HttpResponse(status_code=200)
         except:
             print("could not connect to mongodb")
