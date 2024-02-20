@@ -5,7 +5,8 @@ import os
 
 class DbClient:
 	def __init__(self, collection : str) :
-		url = os.getenv('dbUrl')
+		# url = os.getenv('dbUrl')
+		url = 'mongodb+srv://mirai:Remichan%40admin@udacity-cosmos.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000'
 		client = pymongo.MongoClient(url)
 		database = client['project2']
 		self.collection = database[collection]

@@ -4,7 +4,7 @@ from bson.json_util import dumps
 
 from db_client import DbClient
 
-client = DbClient('ads')
+client = DbClient('advertisements')
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
 

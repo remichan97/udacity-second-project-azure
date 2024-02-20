@@ -5,7 +5,7 @@ import json
 from bson.json_util import dumps
 from db_client import DbClient
 
-client = DbClient('post')
+client = DbClient('posts')
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
 

@@ -6,7 +6,7 @@
       "name": "event",
       "direction": "in",
 	  "eventHubName": "testhub", 
-	  "connection": "Endpoint=sb://udacityneighborly.servicebus.windows.net/;SharedAccessKeyName=allpolicy;SharedAccessKey=LOxUOkN13xN038T1VoSsmaTt4s7vq/+VCzduS5/nH9A=;EntityPath=testhub"
+	  "connection": "Endpoint=sb://neighbourlyappevent.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=Omjj2eGkgaByjkIvCe1WUGcC7528kiNs6+AEhBpXfTk="
     }
   ]
 }
