@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging.config
 import os
 from flask import Flask, Blueprint, request, jsonify, render_template, redirect, url_for
@@ -75,6 +76,9 @@ def home():
 def add_ad_view():
     return render_template("new_ad.html")
 
+@app.route('/post/add', methods=['GET'])
+def add_post_view():
+    return render_template("new_post.html")
 
 @app.route('/ad/edit/<id>', methods=['GET'])
 def edit_ad_view(id):
@@ -82,6 +86,11 @@ def edit_ad_view(id):
     ad = response.json()[0]
     return render_template("edit_ad.html", ad=ad)
 
+@app.route('/post/edit/<id>', methods=['GET'])
+def edit_post_view(id):
+    response = requests.get(settings.API_URL + '/getPost?id=' + id)
+    ad = response.json()[0]
+    return render_template("edit_post.html", post=ad)
 
 @app.route('/ad/delete/<id>', methods=['GET'])
 def delete_ad_view(id):
@@ -109,6 +118,20 @@ def add_ad_request():
     response = requests.post(settings.API_URL + '/createAdvertisement', json=json.dumps(req_data))
     return redirect(url_for('home'))
 
+@app.route('/post/new', methods=['POST'])
+def add_post_request():
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    # Get item from the POST body
+    req_data = {
+        'title': request.form['title'],
+        'description': request.form['description'],
+        'imgUrl': request.form['imgUrl'],
+        'publishedDate': dt_string
+    }
+    response = requests.post(settings.API_URL + '/createPost', json=json.dumps(req_data))
+    return redirect(url_for('home'))
+
 @app.route('/ad/update/<id>', methods=['POST'])
 def update_ad_request(id):
     # Get item from the POST body
@@ -123,16 +146,33 @@ def update_ad_request(id):
     response = requests.put(settings.API_URL + '/updateAdvertisement?id=' + id, json=json.dumps(req_data))
     return redirect(url_for('home'))
 
+@app.route('/post/update/<id>', methods=['POST'])
+def update_post_request(id):
+    # Get item from the POST body
+    req_data = {
+        'title': request.form['title'],
+        'description': request.form['description'],
+        'imgUrl': request.form['imgUrl'],
+    }
+    response = requests.put(settings.API_URL + '/updatePost?id=' + id, json=json.dumps(req_data))
+    return redirect(url_for('home'))
+
 @app.route('/ad/delete/<id>', methods=['POST'])
 def delete_ad_request(id):
     response = requests.delete(settings.API_URL + '/deleteAdvertisement?id=' + id)
+    if response.status_code == 200:
+        return redirect(url_for('home'))
+    
+@app.route('/post/delete/<id>', methods=['GET'])
+def delete_post_request(id):
+    response = requests.delete(settings.API_URL + '/deletePost?id=' + id)
     if response.status_code == 200:
         return redirect(url_for('home'))
 
 # running app
 def main():
     print(' ----->>>> Flask Python Application running in development server')
-    app.run(host=settings.SERVER_HOST, port=settings.SERVER_PORT, debug=settings.FLASK_DEBUG)
+    app.run(host=settings.SERVER_HOST, port=settings.SERVER_PORT)
 
 
 if __name__ == '__main__':

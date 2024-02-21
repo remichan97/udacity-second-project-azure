@@ -4,6 +4,7 @@ FROM mcr.microsoft.com/azure-functions/python:4-python3.11
 
 ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
     AzureFunctionsJobHost__Logging__Console__IsEnabled=true
+ENV dbUrl=mongodb+srv://mirai:Remichan%40admin@udacity-cosmos.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000
 
 COPY requirements.txt /
 RUN pip install -r /requirements.txt
