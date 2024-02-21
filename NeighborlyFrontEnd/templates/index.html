@@ -45,6 +45,7 @@
                  </div><!-- end panel  -->
                 {% endfor %}       
                 <h3 class="ml-2"> General Posts </h3>
+                <div class="mx-auto add-div"><a id="add-post-button" class="btn btn-neighborly" href="/post/add">Create a new ad </a></div>
                 {% for p in posts %}
                 <div class="panel">
                     <div class="panel-body panel-neighborly">
@@ -52,6 +53,10 @@
                         <p class="text-muted"> {{ p.description }}</p>
                         <p><img class="img-small" width="200" src={{p.imgUrl}}></p>
                     </div><!-- end card-body -->
+                    <div class="panel-footer">
+                        <a class="btn btn-warning btn-xs" href="post/edit/{{ p._id['$oid'] }}">Update</a>
+                        <a class="btn btn-danger btn-xs" href="post/delete/{{ p._id['$oid'] }}" onclick="return confirm('Would you like to delete the selected post?')">Delete</a>
+                    </div>
                  </div><!-- end card -->
                 {% endfor %}       
                
