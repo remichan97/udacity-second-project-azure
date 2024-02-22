@@ -2,8 +2,9 @@ import os
 from azure.eventhub import EventData
 from azure.eventhub.aio import EventHubProducerClient
 
-# connection_string = os.getenv("hubconstr")
-connection_string = 'Endpoint=sb://neighbourlyappevent.servicebus.windows.net/;SharedAccessKeyName=access;SharedAccessKey=M6kbQ4FsaZ2OHspfcz6OQjBLl09z/iQUp+AEhOZN0A0=;EntityPath=neighbour'
+# Adapted from examples from https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/eventhub/azure-eventhub/samples/sync_samples/send.py
+
+connection_string = str(os.getenv("hubconstr"))
 hub_name = "neighbour"
 
 class EventHubMessages:
