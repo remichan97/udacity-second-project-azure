@@ -1,0 +1,207 @@
+data:
+  AzureWebJobsStorage: RGVmYXVsdEVuZHBvaW50c1Byb3RvY29sPWh0dHBzO0FjY291bnROYW1lPXVkYWNpdHlwcm9qZWN0c3RvcmFnZTtBY2NvdW50S2V5PWY0aHUveU0vOStYZmYzQkpQblRYeWtQMXdNSGdnd1N0QUJNUlZUOWFMQ0dwQjkzcC8zT3l4cWtrcld6Z21LUm5VekhHZHRYMUowN00rQVN0K2ZqRFVRPT07RW5kcG9pbnRTdWZmaXg9Y29yZS53aW5kb3dzLm5ldA==
+  FUNCTIONS_WORKER_RUNTIME: cHl0aG9u
+  dbUrl: bW9uZ29kYitzcnY6Ly9taXJhaTpSZW1pY2hhbiU0MGFkbWluQHVkYWNpdHktY29zbW9zLm1vbmdvY2x1c3Rlci5jb3Ntb3MuYXp1cmUuY29tLz90bHM9dHJ1ZSZhdXRoTWVjaGFuaXNtPVNDUkFNLVNIQS0yNTYmcmV0cnl3cml0ZXM9ZmFsc2UmbWF4SWRsZVRpbWVNUz0xMjAwMDA=
+  WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: RGVmYXVsdEVuZHBvaW50c1Byb3RvY29sPWh0dHBzO0FjY291bnROYW1lPXVkYWNpdHlwcm9qZWN0c3RvcmFnZTtBY2NvdW50S2V5PWY0aHUveU0vOStYZmYzQkpQblRYeWtQMXdNSGdnd1N0QUJNUlZUOWFMQ0dwQjkzcC8zT3l4cWtrcld6Z21LUm5VekhHZHRYMUowN00rQVN0K2ZqRFVRPT07RW5kcG9pbnRTdWZmaXg9Y29yZS53aW5kb3dzLm5ldA==
+apiVersion: v1
+kind: Secret
+metadata:
+  name: neighbourapi
+---
+data:
+  host.master: TTEyWkVBS3NVakp2dlR0N2QwSnNodDZkdW9wWVpNSUc4WF9jQ3RXdHRrNEJBekZ1S2RDYkd3PT0=
+  host.function.default: RDhmZGdvWnMtcGE0T0JLUUQ1OGQtZFY3MUs5VVFXWHZxbTcwN1VCQ0U1QTRBekZ1TzM2d3JBPT0=
+  host.systemKey.default: dFowTDJsRUZ0WjUwMlZRenZadTVqRjB0bldKX0J0UmZqb0NLZTFiM2NTRm1BekZ1d3RzbDhnPT0=
+  functions.createadvertisement.default: R2xWZDR4Mjg0U3R6aldRcUJJc0xmdlZPRTlQWHJKTlRndk5rZWRxUE5vdGZBekZ1YTA0SVJBPT0=
+  functions.createpost.default: UmtWNWlURFRibmVVMHAwQ2haa3g0V2hUSWwtOGtiVlRtcnBoOEh0c2Y1dXpBekZ1ZnpDVl9RPT0=
+  functions.deleteadvertisement.default: M1RJc0FvT1pmZVpFWDJKakg4YVBYOENTUlVIMUtteDRFclhyVGdEanY2UDlBekZ1OWt3YmJRPT0=
+  functions.deletepost.default: Ni1xaTd3OExlTnlULXo1Z3dCX0RpWWxvTmVvY3diaHBjbmJLdk1nOF9aUHVBekZ1NFRVSVRRPT0=
+  functions.getadvertisement.default: TmhVRVBVN3hDVUY2VjdFOFR0SVhTOWhKOVFtcHozanlZT1FUMlFtbVBXYjJBekZ1bWc0YVV3PT0=
+  functions.getadvertisements.default: ME5VRVpJd2JYZGNDYVZBYnNhWFdvRG56RUR1b2kyeXZRM28xT3A3WlNoSlhBekZ1Um45MFBRPT0=
+  functions.getpost.default: V0pCaHZZajROa1ZBVl9xa1N1ZGtXWXFWcTR3LUlIY29rbjEtWVpHWFBkSUtBekZ1d29pdy1nPT0=
+  functions.getposts.default: MTlhVXRuT0d5MDVBWk9rU3JZVUMxSURUMF9iZmRxV2cyVVN5TFRDZGNhYTBBekZ1V1d3bUFnPT0=
+  functions.updateadvertisement.default: REtfLU5xeHhzdnJsZkZTLUpldFpNOF9hQ0ZuTlBYa0lpNklwUE8tRGMyWWpBekZ1eFl5WUhnPT0=
+  functions.updateposts.default: dnB5UVAySHZkdjFjTzVaRjJnN0NXVEtNcy02VzhLeDFyRGE5UkJuWXJMclRBekZ1UFJQUUtnPT0=
+apiVersion: v1
+kind: Secret
+metadata:
+  name: func-keys-kube-secret-neighbourapi
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: neighbourapi-function-keys-identity-svc-act
+---
+rules:
+- apiGroups:
+  - ''
+  resources:
+  - secrets
+  - configMaps
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: functions-keys-manager-role
+---
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: functions-keys-manager-role
+subjects:
+- kind: ServiceAccount
+  name: neighbourapi-function-keys-identity-svc-act
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: neighbourapi-function-keys-identity-svc-act-functions-keys-manager-rolebinding
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: neighbourapi-http
+spec:
+  selector:
+    app: neighbourapi-http
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: neighbourapi-http
+  labels:
+    app: neighbourapi-http
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: neighbourapi-http
+  template:
+    metadata:
+      labels:
+        app: neighbourapi-http
+    spec:
+      containers:
+      - name: neighbourapi-http
+        image: neighbourlyreg.azurecr.io/neighbourapi:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: AzureFunctionsJobHost__functions__0
+          value: createAdvertisement
+        - name: AzureFunctionsJobHost__functions__1
+          value: createPost
+        - name: AzureFunctionsJobHost__functions__2
+          value: deleteAdvertisement
+        - name: AzureFunctionsJobHost__functions__3
+          value: deletePost
+        - name: AzureFunctionsJobHost__functions__4
+          value: getAdvertisement
+        - name: AzureFunctionsJobHost__functions__5
+          value: getAdvertisements
+        - name: AzureFunctionsJobHost__functions__6
+          value: getPost
+        - name: AzureFunctionsJobHost__functions__7
+          value: getPosts
+        - name: AzureFunctionsJobHost__functions__8
+          value: updateAdvertisement
+        - name: AzureFunctionsJobHost__functions__9
+          value: updatePosts
+        - name: AzureWebJobsSecretStorageType
+          value: kubernetes
+        - name: AzureWebJobsKubernetesSecretName
+          value: secrets/func-keys-kube-secret-neighbourapi
+        envFrom:
+        - secretRef:
+            name: neighbourapi
+        readinessProbe:
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 240
+          httpGet:
+            path: /
+            port: 80
+            scheme: HTTP
+        startupProbe:
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 240
+          httpGet:
+            path: /
+            port: 80
+            scheme: HTTP
+      serviceAccountName: neighbourapi-function-keys-identity-svc-act
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: neighbourapi
+  labels:
+    app: neighbourapi
+spec:
+  selector:
+    matchLabels:
+      app: neighbourapi
+  template:
+    metadata:
+      labels:
+        app: neighbourapi
+    spec:
+      containers:
+      - name: neighbourapi
+        image: neighbourlyreg.azurecr.io/neighbourapi:latest
+        env:
+        - name: AzureFunctionsJobHost__functions__0
+          value: eventHubTrigger
+        envFrom:
+        - secretRef:
+            name: neighbourapi
+        readinessProbe:
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 240
+          httpGet:
+            path: /
+            port: 80
+            scheme: HTTP
+        startupProbe:
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 240
+          httpGet:
+            path: /
+            port: 80
+            scheme: HTTP
+      serviceAccountName: neighbourapi-function-keys-identity-svc-act
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: neighbourapi
+  labels: {}
+spec:
+  scaleTargetRef:
+    name: neighbourapi
+  triggers:
+  - type: eventgridtrigger
+    metadata:
+      direction: in
+      eventHubName: testhub
+      connection: Endpoint=sb://neighbourlyappevent.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=Omjj2eGkgaByjkIvCe1WUGcC7528kiNs6+AEhBpXfTk=
+---
+
