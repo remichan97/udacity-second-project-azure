@@ -10,10 +10,12 @@ from feedgen.feed import FeedGenerator
 from flask import make_response
 from urllib.parse import urljoin
 from feedwerk.atom import AtomFeed
+from event_message import EventHubMessages
+import asyncio
 
 app = Flask(__name__)
 Bootstrap(app)
-
+event = EventHubMessages()
 
 
 def get_abs_url(url):
@@ -69,6 +71,7 @@ def home():
 
     ads = response.json()
     posts = response2.json()
+    asyncio.run(event.send_message("User has landed on homepage"))
     return render_template("index.html", ads=ads, posts=posts)
 
 
@@ -116,6 +119,7 @@ def add_ad_request():
         'price': request.form['price']
     }
     response = requests.post(settings.API_URL + '/createAdvertisement', json=json.dumps(req_data))
+    asyncio.run(event.send_message("User has added an ad"))
     return redirect(url_for('home'))
 
 @app.route('/post/new', methods=['POST'])
@@ -130,6 +134,7 @@ def add_post_request():
         'publishedDate': dt_string
     }
     response = requests.post(settings.API_URL + '/createPost', json=json.dumps(req_data))
+    asyncio.run(event.send_message("User has added a post"))
     return redirect(url_for('home'))
 
 @app.route('/ad/update/<id>', methods=['POST'])
@@ -144,6 +149,7 @@ def update_ad_request(id):
         'price': request.form['price']
     }
     response = requests.put(settings.API_URL + '/updateAdvertisement?id=' + id, json=json.dumps(req_data))
+    asyncio.run(event.send_message("User has edited an ad"))
     return redirect(url_for('home'))
 
 @app.route('/post/update/<id>', methods=['POST'])
@@ -155,17 +161,20 @@ def update_post_request(id):
         'imgUrl': request.form['imgUrl'],
     }
     response = requests.put(settings.API_URL + '/updatePost?id=' + id, json=json.dumps(req_data))
+    asyncio.run(event.send_message("User has edited a post"))
     return redirect(url_for('home'))
 
 @app.route('/ad/delete/<id>', methods=['POST'])
 def delete_ad_request(id):
     response = requests.delete(settings.API_URL + '/deleteAdvertisement?id=' + id)
+    asyncio.run(event.send_message("User has attempted to delete an ad"))
     if response.status_code == 200:
         return redirect(url_for('home'))
     
 @app.route('/post/delete/<id>', methods=['GET'])
 def delete_post_request(id):
     response = requests.delete(settings.API_URL + '/deletePost?id=' + id)
+    asyncio.run(event.send_message("User has attempted to delete a post"))
     if response.status_code == 200:
         return redirect(url_for('home'))
 
